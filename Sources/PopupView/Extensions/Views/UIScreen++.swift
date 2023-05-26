@@ -36,7 +36,7 @@ private extension UIScreen {
 }
 
 
-class XScreen {
+public class PopupXScreen {
     static let safeArea: EdgeInsets = {
         let uiInsets = UIScreen.safeArea
         let edgeInsets = EdgeInsets(top: uiInsets.top, leading: uiInsets.left, bottom: uiInsets.bottom, trailing: uiInsets.right)
@@ -61,7 +61,7 @@ extension NSScreen {
 }
 
 
-class XScreen {
+public class PopupXScreen {
     static let safeArea: EdgeInsets = {
         let screenRect = NSScreen.safeArea
         // The origin in macOS is at the lower left corner of the screen, so the top safe area is at the bottom of the screen

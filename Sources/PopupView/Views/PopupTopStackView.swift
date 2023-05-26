@@ -120,7 +120,7 @@ private extension PopupTopStackView {
 }
 
 private extension PopupTopStackView {
-    var contentTopPadding: CGFloat { config.contentIgnoresSafeArea ? 0 : max(XScreen.safeArea.top - topPadding, 0) }
+    var contentTopPadding: CGFloat { config.contentIgnoresSafeArea ? 0 : max(PopupXScreen.safeArea.top - topPadding, 0) }
     var topPadding: CGFloat { config.popupPadding.top }
     var height: CGFloat { heights.first { $0.key == items.last }?.value ?? 0 }
     var opacityFactor: Double { 1 / config.stackLimit.doubleValue }
