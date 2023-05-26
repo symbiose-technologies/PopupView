@@ -61,9 +61,18 @@ private extension ScreenManager {
 }
 
 // MARK: - Helpers
-fileprivate extension NSWindow {
+extension NSWindow {
     static var activeWindowSize: CGSize {
         return NSApplication.shared.keyWindow?.frame.size ?? CGSize.zero
+    }
+    
+    static var activeFrame: NSRect {
+        NSApplication.shared.keyWindow?.frame ?? .zero
+    }
+    
+    static var titlebarHeight: CGFloat {
+        let titlebarHeight = NSApplication.shared.keyWindow?.titlebarHeight ?? 0
+        return titlebarHeight
     }
 }
 

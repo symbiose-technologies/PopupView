@@ -17,20 +17,57 @@ struct PopupView: View {
     #if os(iOS)
     @StateObject private var screenObserver: ScreenManager = .init()
     var screenSize: CGSize {
-        screenObserver.screenSize
+        let size = screenObserver.screenSize
+        print("Screen Size: \(size)")
+        return size
     }
+    
+    var body: some View {
+        createPopupStackView()
+            .background(
+                createOverlay()
+            )
+    }
+    
     #endif
     
     #if os(macOS)
     @State var geometrySize: CGSize = .zero
     var screenSize: CGSize {
-        geometrySize
+        let size = geometrySize
+//        print("Screen Size: \(size)")
+        return size
+
     }
-    #endif
     
     var body: some View {
-        createPopupStackView().background(createOverlay())
+        GeometryReader { geo in
+            
+            ZStack {
+                createOverlay()
+                    .ignoresSafeArea()
+                createPopupStackView()
+            }
+            .ignoresSafeArea()
+                .onAppear {
+                    geometrySize = geo.size
+//                    print("onAppear geometrySize: \(geometrySize)")
+                }
+                .onChange(of: geo.size, perform: { newValue in
+//                    print("onChange geometrySize: \(newValue)")
+                    geometrySize = newValue
+                })
+        }
+        .ignoresSafeArea()
+
     }
+    
+    
+    #endif
+    
+    
+    
+    
 }
 
 private extension PopupView {
@@ -41,6 +78,7 @@ private extension PopupView {
             createBottomPopupStackView()
         }
     }
+    #if os(iOS)
     func createOverlay() -> some View {
         overlayColour
             .frame(size: screenSize)
@@ -48,6 +86,17 @@ private extension PopupView {
             .visible(if: !stack.isEmpty)
             .animation(overlayAnimation, value: stack.isEmpty)
     }
+    #endif
+    
+    #if os(macOS)
+    func createOverlay() -> some View {
+        overlayColour
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
+            .opacity(stack.isEmpty ? 0 : 1)
+            .animation(overlayAnimation, value: stack.isEmpty)
+    }
+    #endif
 }
 
 private extension PopupView {
@@ -66,5 +115,6 @@ private extension PopupView {
 
 private extension PopupView {
     var overlayColour: Color { .black.opacity(0.44) }
+    
     var overlayAnimation: Animation { .easeInOut }
 }
