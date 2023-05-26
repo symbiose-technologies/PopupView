@@ -11,6 +11,7 @@
 import SwiftUI
 import Combine
 
+#if os(iOS)
 class ScreenManager: ObservableObject {
     @Published private(set) var screenSize: CGSize = UIScreen.size
     private var subscription: [AnyCancellable] = []
@@ -33,3 +34,38 @@ private extension ScreenManager {
 fileprivate extension UIScreen {
     static var size: CGSize { main.bounds.size }
 }
+#endif
+
+#if os(macOS)
+import AppKit
+
+class ScreenManager: ObservableObject {
+    @Published private(set) var screenSize: CGSize = NSWindow.activeWindowSize
+    private var subscription: AnyCancellable?
+    
+    init() {
+        subscribeToWindowSizeChangeEvents()
+    }
+}
+
+private extension ScreenManager {
+    func subscribeToWindowSizeChangeEvents() {
+        guard let activeWindow = NSApplication.shared.keyWindow else {
+            return
+        }
+        subscription = NotificationCenter.default
+            .publisher(for: NSWindow.didResizeNotification, object: activeWindow)
+            .receive(on: DispatchQueue.main)
+            .sink { _ in self.screenSize = NSWindow.activeWindowSize }
+    }
+}
+
+// MARK: - Helpers
+fileprivate extension NSWindow {
+    static var activeWindowSize: CGSize {
+        return NSApplication.shared.keyWindow?.frame.size ?? CGSize.zero
+    }
+}
+
+
+#endif

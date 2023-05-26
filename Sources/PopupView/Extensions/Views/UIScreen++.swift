@@ -10,15 +10,15 @@
 
 import SwiftUI
 
-// MARK: - Reading Safe Area of the screen
+#if os(iOS)
 extension UIScreen {
-    static var safeArea: UIEdgeInsets = {
+    static let safeArea: UIEdgeInsets = {
         UIApplication.shared.connectedScenes
-            .filter { $0.activationState == .foregroundActive }
-            .map { $0 as? UIWindowScene }
-            .compactMap { $0 }
+            .filter({$0.activationState == .foregroundActive})
+            .map({$0 as? UIWindowScene})
+            .compactMap({$0})
             .first?.windows
-            .filter { $0.isKeyWindow }
+            .filter({$0.isKeyWindow})
             .first?
             .safeAreaInsets ?? .zero
     }()
@@ -34,3 +34,46 @@ private extension UIScreen {
             .reversed().joined()
     }()
 }
+
+
+class XScreen {
+    static let safeArea: EdgeInsets = {
+        let uiInsets = UIScreen.safeArea
+        let edgeInsets = EdgeInsets(top: uiInsets.top, leading: uiInsets.left, bottom: uiInsets.bottom, trailing: uiInsets.right)
+        return edgeInsets
+    }()
+    
+    static var displayCornerRadius: CGFloat? = {
+        return UIScreen.displayCornerRadius
+    }()
+    
+}
+#endif
+
+
+#if os(macOS)
+import AppKit
+
+extension NSScreen {
+    static var safeArea: NSRect {
+        return NSScreen.main?.visibleFrame ?? NSRect.zero
+    }
+}
+
+
+class XScreen {
+    static let safeArea: EdgeInsets = {
+        let screenRect = NSScreen.safeArea
+        // The origin in macOS is at the lower left corner of the screen, so the top safe area is at the bottom of the screen
+        let edgeInsets = EdgeInsets(top: 0, leading: screenRect.origin.x, bottom: screenRect.origin.y, trailing: screenRect.size.width)
+        return edgeInsets
+    }()
+    
+    
+    static var displayCornerRadius: CGFloat? = {
+        return nil
+    }()
+}
+
+
+#endif

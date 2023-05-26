@@ -10,6 +10,7 @@
 import SwiftUI
 import Combine
 
+#if os(iOS)
 class KeyboardManager: ObservableObject {
     @Published private(set) var keyboardHeight: CGFloat = 0
     private var subscription: [AnyCancellable] = []
@@ -39,3 +40,15 @@ private extension KeyboardManager {
             .map { _ in .zero }
     }
 }
+#endif
+
+
+#if os(macOS)
+class KeyboardManager: ObservableObject {
+    @Published private(set) var keyboardHeight: CGFloat = 0
+    private var subscription: [AnyCancellable] = []
+
+    init() { }
+}
+
+#endif
