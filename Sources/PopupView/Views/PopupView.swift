@@ -18,7 +18,7 @@ struct PopupView: View {
     @StateObject private var screenObserver: ScreenManager = .init()
     var screenSize: CGSize {
         let size = screenObserver.screenSize
-        print("Screen Size: \(size)")
+//        print("Screen Size: \(size)")
         return size
     }
     
