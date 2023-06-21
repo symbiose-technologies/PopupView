@@ -61,8 +61,16 @@ private extension PopupCentreStackView {
 }
 private extension PopupCentreStackView {
     func showNewPopup(_ popup: AnyPopup<CentrePopupConfig>) { DispatchQueue.main.async {
-        activeView = AnyView(popup.body)
+        activeView = AnyView(
+            popup.body
+                .autoDismisses(popup.getConfig().autoDismissBehavior) {
+                    withAnimation {
+                        popup.dismissSelf()
+                    }
+                }
+        )
         configTemp = popup.configurePopup(popup: .init())
+
     }}
     func animateContentIfNeeded() { if height != nil {
         contentIsAnimated = true

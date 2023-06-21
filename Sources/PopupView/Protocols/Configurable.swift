@@ -10,7 +10,10 @@
 
 import Foundation
 
-public protocol Configurable {}
+public protocol Configurable {
+    var autoDismissBehavior: PopupViewAutoDismissal { get }
+}
+
 extension Configurable {
     func changing<T>(path: WritableKeyPath<Self, T>, to value: T) -> Self {
         var clone = self

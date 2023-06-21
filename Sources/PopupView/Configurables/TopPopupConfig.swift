@@ -10,6 +10,14 @@
 
 import SwiftUI
 
+
+// MARK: - AutoDismissal
+public extension TopPopupConfig {
+    func autoDismiss(_ dismissalType: PopupViewAutoDismissal) -> Self {
+        changing(path: \.autoDismissal, to: dismissalType)
+    }
+}
+
 // MARK: - Content Customisation
 public extension TopPopupConfig {
     /// Whether content should ignore safe area
@@ -88,4 +96,10 @@ public struct TopPopupConfig: Configurable {
 
     private(set) var transitionAnimation: Animation = .spring(response: 0.32, dampingFraction: 1, blendDuration: 0.32)
     private(set) var dragGestureAnimation: Animation = .interactiveSpring()
+    
+    private(set) var autoDismissal: PopupViewAutoDismissal = .disabled
+    
+    public var autoDismissBehavior: PopupViewAutoDismissal { autoDismissal }
+    
+
 }

@@ -52,6 +52,11 @@ private extension PopupTopStackView {
             .opacity(getOpacity(for: item))
             .offset(y: getOffset(for: item))
             .scaleEffect(getScale(for: item), anchor: .bottom)
+            .autoDismisses(item.getConfig().autoDismissBehavior) {
+                withAnimation {
+                    item.dismissSelf()
+                }
+            }
             .compositingGroup()
             .alignToTop(topPadding)
             .transition(transition)
@@ -133,4 +138,5 @@ private extension PopupTopStackView {
     var gestureClosingThresholdFactor: CGFloat { config.dragGestureProgressToClose }
     var transition: AnyTransition { .move(edge: .top) }
     var config: TopPopupConfig { items.last?.configurePopup(popup: .init()) ?? .init() }
+    
 }

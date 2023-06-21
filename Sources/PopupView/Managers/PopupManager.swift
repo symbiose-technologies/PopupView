@@ -76,11 +76,23 @@ private extension [any Popup] {
     }
     mutating func performOperation(_ operation: Operation) {
         switch operation {
-            case .insertAndReplace(let popup): replaceLast(popup, if: canBeInserted(popup))
-            case .insertAndStack(let popup): append(popup, if: canBeInserted(popup))
-            case .removeLast: removeLast()
-            case .remove(let id): removeAll(where: { $0.id == id })
-            case .removeAll: removeAll()
+        case .insertAndReplace(let popup):
+            let replaced = replaceLastReturning(popup, if: canBeInserted(popup))
+            replaced?.onDismissal()
+        case .insertAndStack(let popup):
+            append(popup, if: canBeInserted(popup))
+        case .removeLast:
+            let last = self.last
+            removeLast()
+            last?.onDismissal()
+        case .remove(let id):
+            let matching = self.filter { $0.id == id }
+            removeAll(where: { $0.id == id })
+            matching.forEach { $0.onDismissal() }
+        case .removeAll:
+            let all = self
+            removeAll()
+            all.forEach { $0.onDismissal() }
         }
     }
     func liftBlockade() {

@@ -20,11 +20,16 @@ struct AnyPopup<Config: Configurable>: Popup, Hashable {
     private let _body: AnyView
     private let _configBuilder: (Config) -> Config
 
+    var onDismissCb: (() -> Void)?
+    
     init(_ popup: some Popup) {
         self.id = popup.id
+        self.onDismissCb = popup.onDismissCb
         self._body = AnyView(popup)
         self._configBuilder = popup.configurePopup as! (Config) -> Config
     }
+    
+    
 }
 extension AnyPopup {
     static func == (lhs: AnyPopup<Config>, rhs: AnyPopup<Config>) -> Bool { lhs.id == rhs.id }
@@ -34,3 +39,24 @@ extension AnyPopup {
     func createContent() -> some View { _body }
     func configurePopup(popup: Config) -> Config { _configBuilder(popup) }
 }
+
+extension AnyPopup where Config == TopPopupConfig {
+    func getConfig() -> TopPopupConfig {
+        self.configurePopup(popup: .init())
+    }
+}
+
+extension AnyPopup where Config == BottomPopupConfig {
+    func getConfig() -> BottomPopupConfig {
+        self.configurePopup(popup: .init())
+    }
+    
+}
+
+extension AnyPopup where Config == CentrePopupConfig {
+    func getConfig() -> CentrePopupConfig {
+        self.configurePopup(popup: .init())
+    }
+    
+}
+

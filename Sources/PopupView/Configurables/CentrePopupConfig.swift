@@ -10,6 +10,13 @@
 
 import SwiftUI
 
+// MARK: - AutoDismissal
+public extension CentrePopupConfig {
+    func autoDismiss(_ dismissalType: PopupViewAutoDismissal) -> Self {
+        changing(path: \.autoDismissal, to: dismissalType)
+    }
+}
+
 // MARK: - Popup Customisation
 public extension CentrePopupConfig {
     /// Background colour of the popup
@@ -56,4 +63,10 @@ public struct CentrePopupConfig: Configurable {
     private(set) var transitionEntryScale: CGFloat = 1.1
     private(set) var transitionExitScale: CGFloat = 0.86
     private(set) var transitionAnimation: Animation = .spring(response: 0.28, dampingFraction: 1, blendDuration: 0.28)
+    
+    private(set) var autoDismissal: PopupViewAutoDismissal = .disabled
+        
+    
+    public var autoDismissBehavior: PopupViewAutoDismissal { autoDismissal }
+    
 }

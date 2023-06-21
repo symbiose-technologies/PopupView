@@ -53,6 +53,11 @@ private extension PopupBottomStackView {
             .opacity(getOpacity(for: item))
             .offset(y: getOffset(for: item))
             .scaleEffect(getScale(for: item), anchor: .top)
+            .autoDismisses(item.getConfig().autoDismissBehavior) {
+                withAnimation {
+                    item.dismissSelf()
+                }
+            }
             .compositingGroup()
             .alignToBottom(if: !config.contentFillsEntireScreen, popupBottomPadding)
             .transition(transition)

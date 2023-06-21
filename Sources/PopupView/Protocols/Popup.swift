@@ -18,7 +18,27 @@ public protocol Popup: View {
 
     func createContent() -> V
     func configurePopup(popup: Config) -> Config
+    
+    var onDismissCb: (() -> Void)? { get set }
 }
+
+public extension Popup {
+    func onDismissal() -> Void {
+        if let cb = self.onDismissCb {
+            cb()
+//            print("onDismissal implemented")
+        } else {
+//            print("onDismissal NOT implemented")
+        }
+    }
+    
+    func withDismissalCb(_ cb: (() -> Void)?) -> Self {
+        var clone = self
+        clone.onDismissCb = cb
+        return clone
+    }
+}
+
 
 // MARK: - Presenting and Dismissing
 public extension Popup {
@@ -37,14 +57,25 @@ public extension Popup {
 
     /// Dismisses all popups on the stack
     func dismissAll() { PopupManager.dismissAll() }
+    
+    /// Dismiss self
+    func dismissSelf() { PopupManager.dismiss(id: self.id) }
 }
 
 // MARK: - Others
 public extension Popup {
     var id: String { .init(describing: Self.self) }
-    var body: V { createContent() }
+    var body: V {
+        createContent()
+    }
 
     func configurePopup(popup: Config) -> Config { popup }
+    
+    var onDismissCb: (() -> Void)? {
+        get { nil }
+        set { }
+    }
+    
 }
 
 
