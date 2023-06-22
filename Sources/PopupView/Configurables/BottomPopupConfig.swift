@@ -15,7 +15,6 @@ public extension BottomPopupConfig {
     func autoDismiss(_ dismissalType: PopupViewAutoDismissal) -> Self {
         changing(path: \.autoDismissal, to: dismissalType)
     }
-    
 }
 
 // MARK: - Content Customisation
@@ -114,6 +113,4 @@ public struct BottomPopupConfig: Configurable {
     
     private(set) var autoDismissal: PopupViewAutoDismissal = .disabled
     public var autoDismissBehavior: PopupViewAutoDismissal { autoDismissal }
-    
-
 }

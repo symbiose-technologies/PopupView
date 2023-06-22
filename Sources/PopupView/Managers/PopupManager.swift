@@ -10,20 +10,59 @@
 
 import SwiftUI
 
+
 public extension PopupManager {
 
     /// Dismisses last popup on the stack
-    static func dismiss() { shared.views.perform(.removeLast) }
+    static func dismiss() {
+        shared.dismiss()
+    }
 
     /// Dismisses all popups with provided ID on the stack
-    static func dismiss(id: String) { shared.views.perform(.remove(id: id)) }
+    static func dismiss(id: String) {
+        shared.dismiss(id: id)
+        
+    }
 
     /// Dismisses all popups of provided type on the stack.
     /// ** WARNING: ** Method won't work if ID of the popup is custom
-    static func dismiss<P: Popup>(_ popup: P.Type) { shared.views.perform(.remove(id: .init(describing: popup))) }
+    static func dismiss<P: Popup>(_ popup: P.Type) {
+//        shared.views.perform(.remove(id: .init(describing: popup)))
+        shared.dismiss(popup)
+    }
 
     /// Dismisses all the popups on the stack.
-    static func dismissAll() { shared.views.perform(.removeAll) }
+    static func dismissAll() {
+        shared.dismissAll()
+//        shared.views.perform(.removeAll)
+    }
+}
+
+
+public extension PopupManager {
+
+    /// Dismisses last popup on the stack
+    func dismiss() {
+        self.views.perform(.removeLast)
+    }
+
+    /// Dismisses all popups with provided ID on the stack
+    func dismiss(id: String) {
+        self.views.perform(.remove(id: id))
+        
+    }
+
+    /// Dismisses all popups of provided type on the stack.
+    /// ** WARNING: ** Method won't work if ID of the popup is custom
+    func dismiss<P: Popup>(_ popup: P.Type) {
+        self.views.perform(.remove(id: .init(describing: popup)))
+        
+    }
+
+    /// Dismisses all the popups on the stack.
+    func dismissAll() {
+        self.views.perform(.removeAll)
+    }
 }
 
 
@@ -32,8 +71,19 @@ public class PopupManager: ObservableObject {
     @Published private var views: [any Popup] = []
     fileprivate var operationRecentlyPerformed: Bool = false
 
-    static let shared: PopupManager = .init()
-    private init() {}
+    public static let ROOT_ID = "ROOT"
+    
+    var registry: PopupManagerRegistry { PopupManagerRegistry.shared }
+    
+    static var shared: PopupManager { PopupManagerRegistry.shared.activePopupManager }
+    
+    public let id: String
+
+    public init(id: String) {
+        self.id = id
+    }
+    
+    
 }
 
 extension PopupManager {

@@ -14,6 +14,7 @@ public protocol TopPopup: Popup { associatedtype Config = TopPopupConfig }
 public protocol CentrePopup: Popup { associatedtype Config = CentrePopupConfig }
 public protocol BottomPopup: Popup { associatedtype Config = BottomPopupConfig }
 
+
 struct AnyPopup<Config: Configurable>: Popup, Hashable {
     let id: String
 
