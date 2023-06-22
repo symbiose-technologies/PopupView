@@ -62,6 +62,12 @@ public extension Popup {
     func dismissSelf() { PopupManager.dismiss(id: self.id) }
 }
 
+// MARK: - Presenting / Dismissing from Explicitly provided manager id
+
+
+
+
+
 // MARK: - Others
 public extension Popup {
     var id: String { .init(describing: Self.self) }

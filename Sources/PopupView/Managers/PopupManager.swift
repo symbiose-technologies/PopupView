@@ -87,7 +87,19 @@ public class PopupManager: ObservableObject {
 }
 
 extension PopupManager {
-    static func show(_ popup: some Popup, withStacking shouldStack: Bool) { DispatchQueue.main.async { withAnimation(nil) { shared.views.perform(shouldStack ? .insertAndStack(popup) : .insertAndReplace(popup)) }}}
+    static func show(_ popup: some Popup, withStacking shouldStack: Bool) {
+        PopupManager.shared.show(popup, withStacking: shouldStack)
+    }
+    static func show(_ popup: some Popup, withStacking shouldStack: Bool, managerId: String) {
+        PopupManagerRegistry.shared.manager(for: managerId)?.show(popup, withStacking: shouldStack)
+    }
+
+   func show(_ popup: some Popup, withStacking shouldStack: Bool) {
+        DispatchQueue.main.async {
+        withAnimation(nil) {
+            self.views.perform(shouldStack ? .insertAndStack(popup) : .insertAndReplace(popup))
+        }}}
+    
 }
 
 extension PopupManager {

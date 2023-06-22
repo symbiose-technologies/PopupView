@@ -28,7 +28,7 @@ public extension EnvironmentValues {
 }
 public extension View {
     
-    func createAndSetPopupManager(_ id: String?) -> some View {
+    func createAndSetPopupManager(_ id: String? = nil) -> some View {
         let resolvedId = id ?? UUID().uuidString
         PopupManagerRegistry.shared.register(id: resolvedId, makeActive: true)
         return self
@@ -110,5 +110,72 @@ public class PopupManagerRegistry {
             managers.removeLast()
             activePopupManagerIndex = managers.count - 1
         }
+    }
+    
+    
+    /// Returns the `PopupManager` with the specified ID.
+    ///
+    /// This method returns `nil` if no `PopupManager` with the specified ID is found.
+    ///
+    /// - Parameter id: The ID of the `PopupManager` to retrieve.
+    /// - Returns: The `PopupManager` with the specified ID, or `nil` if no such `PopupManager` is found.
+    public func manager(for id: String) -> PopupManager? {
+        return managers.first { $0.id == id }
+    }
+    
+    
+}
+
+
+// MARK: - Presenting and Dismissing
+public extension Popup {
+    /// Displays the popup. Stacks previous one
+    @discardableResult
+    func showAndStack(managerId: String) -> Bool {
+        guard let manager = PopupManagerRegistry.shared.manager(for: managerId) else { return false }
+        manager.show(AnyPopup<Config>(self), withStacking: true)
+        return true
+    }
+
+    /// Displays the popup. Closes previous one
+    @discardableResult
+    func showAndReplace(managerId: String) -> Bool {
+        guard let manager = PopupManagerRegistry.shared.manager(for: managerId) else { return false }
+        manager.show(AnyPopup<Config>(self), withStacking: false)
+        return true
+    }
+}
+
+public extension Popup {
+    /// Dismisses the last popup on the stack
+    @discardableResult
+    func dismiss(managerId: String) -> Bool {
+        guard let manager = PopupManagerRegistry.shared.manager(for: managerId) else { return false }
+        manager.dismiss()
+        return true
+    }
+
+    /// Dismisses all popups of the selected type on the stack
+    @discardableResult
+    func dismiss<P: Popup>(_ popup: P.Type, managerId: String) -> Bool {
+        guard let manager = PopupManagerRegistry.shared.manager(for: managerId) else { return false }
+        manager.dismiss(popup)
+        return true
+    }
+
+    /// Dismisses all popups on the stack
+    @discardableResult
+    func dismissAll(managerId: String) -> Bool {
+        guard let manager = PopupManagerRegistry.shared.manager(for: managerId) else { return false }
+        manager.dismissAll()
+        return true
+    }
+    
+    /// Dismiss self
+    @discardableResult
+    func dismissSelf(managerId: String) -> Bool {
+        guard let manager = PopupManagerRegistry.shared.manager(for: managerId) else { return false }
+        manager.dismiss(id: self.id)
+        return true
     }
 }
