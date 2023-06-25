@@ -33,6 +33,7 @@ public extension View {
         PopupManagerRegistry.shared.register(id: resolvedId, makeActive: true)
         return self
             .environment(\.activePopupManagerId, resolvedId)
+            .implementPopupViewFor(managerId: resolvedId)
     }
     
 }

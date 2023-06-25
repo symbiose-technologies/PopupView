@@ -14,6 +14,9 @@ public extension View {
     func implementPopupView() -> some View {
         overlay(PopupView())
     }
+    func implementPopupViewFor(managerId: String) -> some View {
+        overlay(PopupView(managerId: managerId))
+    }
 }
 
 // MARK: - Alignments

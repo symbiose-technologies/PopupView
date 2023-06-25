@@ -11,9 +11,19 @@
 import SwiftUI
 
 struct PopupView: View {
-    @StateObject private var stack: PopupManager = .shared
+    @StateObject private var stack: PopupManager
     @StateObject private var keyboardObserver: KeyboardManager = .init()
 
+    let managerId: String
+
+    
+    init(managerId: String = PopupManager.ROOT_ID) {
+        self.managerId = managerId
+        self._stack = .init(wrappedValue: PopupManagerRegistry.shared.manager(for: managerId) ?? PopupManager.shared)
+    }
+
+    
+    
     #if os(iOS)
     @StateObject private var screenObserver: ScreenManager = .init()
     var screenSize: CGSize {
