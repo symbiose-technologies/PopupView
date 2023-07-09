@@ -101,5 +101,32 @@ public struct TopPopupConfig: Configurable {
     
     public var autoDismissBehavior: PopupViewAutoDismissal { autoDismissal }
     
+    public init() { }
+
+}
+
+extension TopPopupConfig: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(contentIgnoresSafeArea)
+        hasher.combine(backgroundColour)
+        hasher.combine(activePopupCornerRadius)
+//        hasher.combine(popupPadding)
+        hasher.combine(stackCornerRadius)
+        hasher.combine(stackOffset)
+        hasher.combine(stackScaleFactor)
+        hasher.combine(stackLimit)
+        hasher.combine(tapOutsideClosesView)
+        hasher.combine(dragGestureEnabled)
+        hasher.combine(dragGestureProgressToClose)
+//        hasher.combine(transitionAnimation)
+//        hasher.combine(dragGestureAnimation)
+        hasher.combine(autoDismissal)
+    }
+}
+
+extension TopPopupConfig: Equatable {
+    public static func == (lhs: TopPopupConfig, rhs: TopPopupConfig) -> Bool {
+        lhs.hashValue == rhs.hashValue
+    }
 
 }

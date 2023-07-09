@@ -113,4 +113,41 @@ public struct BottomPopupConfig: Configurable {
     
     private(set) var autoDismissal: PopupViewAutoDismissal = .disabled
     public var autoDismissBehavior: PopupViewAutoDismissal { autoDismissal }
+    
+    public init() { }
+
+}
+
+
+extension BottomPopupConfig: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(contentIgnoresSafeArea)
+        hasher.combine(contentFillsWholeHeight)
+        hasher.combine(contentFillsEntireScreen)
+        hasher.combine(distanceFromKeyboard)
+
+        hasher.combine(backgroundColour)
+        hasher.combine(activePopupCornerRadius)
+//        hasher.combine(popupPadding)
+
+        hasher.combine(stackCornerRadius)
+        hasher.combine(stackOffset)
+        hasher.combine(stackScaleFactor)
+        hasher.combine(stackLimit)
+
+        hasher.combine(tapOutsideClosesView)
+        hasher.combine(dragGestureEnabled)
+        hasher.combine(dragGestureProgressToClose)
+
+//        hasher.combine(dragGestureAnimation)
+//        hasher.combine(transitionAnimation)
+        
+        hasher.combine(autoDismissal)
+    }
+}
+extension BottomPopupConfig: Equatable {
+    public static func == (lhs: BottomPopupConfig, rhs: BottomPopupConfig) -> Bool {
+        lhs.hashValue == rhs.hashValue
+    }
+
 }

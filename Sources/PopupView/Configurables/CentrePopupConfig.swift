@@ -68,5 +68,25 @@ public struct CentrePopupConfig: Configurable {
         
     
     public var autoDismissBehavior: PopupViewAutoDismissal { autoDismissal }
+    public init() { }
+}
+extension CentrePopupConfig: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(backgroundColour)
+        hasher.combine(cornerRadius)
+        hasher.combine(horizontalPadding)
+        hasher.combine(tapOutsideClosesView)
+        hasher.combine(contentAnimationTime)
+        hasher.combine(transitionEntryScale)
+        hasher.combine(transitionExitScale)
+//        hasher.combine(transitionAnimation)
+        hasher.combine(autoDismissal)
+    }
+
+}
+extension CentrePopupConfig: Equatable {
+    public static func == (lhs: CentrePopupConfig, rhs: CentrePopupConfig) -> Bool {
+        lhs.hashValue == rhs.hashValue
     
+    }
 }

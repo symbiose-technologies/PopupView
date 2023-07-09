@@ -133,6 +133,8 @@ public extension Popup {
     /// Displays the popup. Stacks previous one
     @discardableResult
     func showAndStack(managerId: String) -> Bool {
+        
+        
         guard let manager = PopupManagerRegistry.shared.manager(for: managerId) else { return false }
         manager.show(AnyPopup<Config>(self), withStacking: true)
         return true
