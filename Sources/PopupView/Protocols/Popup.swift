@@ -24,12 +24,8 @@ public protocol Popup: View {
 
 public extension Popup {
     func onDismissal() -> Void {
-        if let cb = self.onDismissCb {
-            cb()
-//            print("onDismissal implemented")
-        } else {
-//            print("onDismissal NOT implemented")
-        }
+        self.onDismissCb?()
+        
     }
     
     func withDismissalCb(_ cb: (() -> Void)?) -> Self {
