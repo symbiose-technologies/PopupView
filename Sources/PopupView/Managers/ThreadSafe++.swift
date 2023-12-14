@@ -25,7 +25,7 @@ import Foundation
 /// by implementing the `_modify` accessor, which allows the same memory
 /// address to be modified serially when accessed from multiple threads.
 /// See: https://forums.swift.org/t/modify-accessors/31872
-@propertyWrapper public struct ThreadSafe<T> {
+@propertyWrapper public struct PopupThreadSafe<T> {
 
     private var _value: T
     private let lock = NSLock()
@@ -50,7 +50,7 @@ import Foundation
 
     public init(wrappedValue: T, queue: DispatchQueue? = nil) {
         self._value = wrappedValue
-        self.queue = queue ?? DispatchQueue(label: "ThreadSafe \(String(typeName: T.self))")
+        self.queue = queue ?? DispatchQueue(label: "PopupThreadSafe \(String(typeName: T.self))")
     }
 }
 

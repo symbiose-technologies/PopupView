@@ -45,7 +45,7 @@ public extension View {
 public class PopupManagerRegistry {
     
     /// Thread-safe array of `PopupManager` instances.
-    @ThreadSafe private(set) public var managers: [PopupManager]
+    @PopupThreadSafe private(set) public var managers: [PopupManager]
     
     /// Index of the currently active `PopupManager` in the `managers` array.
     private var activePopupManagerIndex: Int
